@@ -1,0 +1,13 @@
+﻿{
+    "codes": [
+        {
+            "code": "ALPHA",
+            "rewards": [
+                {
+                    "type": 0,
+                    "amount": 500
+                }
+            ]
+        }
+    ]
+}
