@@ -3,23 +3,42 @@ using UnityEngine;
 
 public static class DbPaths
 {
+    public static readonly string DbFolder;
+    public static readonly string PlayerFolder;
+    public static readonly string AccountsFile;
+    public static readonly string PlayersDataFolder;
+    public static readonly string PromoFile;
+
+    private const string DbFolderName = "db";
+    private const string PlayerFolderName = "Player";
+    private const string AccountsFileName = "accounts.json";
+    private const string PlayersDataFolderName = "PlayersData";
+    private const string PromoFileName = "promo.json";
+
+    static DbPaths()
+    {
+        string buildRoot = GetBuildRoot();
+
+        DbFolder = Path.Combine(buildRoot, DbFolderName);
+        PlayerFolder = Path.Combine(DbFolder, PlayerFolderName);
+        AccountsFile = Path.Combine(PlayerFolder, AccountsFileName);
+        PlayersDataFolder = Path.Combine(PlayerFolder, PlayersDataFolderName);
+        PromoFile = Path.Combine(DbFolder, PromoFileName);
+    }
+
     private static string GetBuildRoot()
     {
 #if UNITY_EDITOR
         return Application.dataPath;
 #else
-        string dir = Path.GetDirectoryName(Application.dataPath);
-        return string.IsNullOrEmpty(dir) ? Application.persistentDataPath : dir;
+        string parent = Path.GetDirectoryName(Application.dataPath);
+
+        if (string.IsNullOrEmpty(parent) == false)
+            return parent;
+
+        return Application.persistentDataPath;
 #endif
     }
-
-    private static readonly string s_buildRoot = GetBuildRoot();
-
-    public static readonly string DbFolder = Path.Combine(s_buildRoot, "db");
-    public static readonly string PlayerFolder = Path.Combine(DbFolder, "Player");
-    public static readonly string AccountsFile = Path.Combine(PlayerFolder, "accounts.json");
-    public static readonly string PlayersDataFolder = Path.Combine(PlayerFolder, "PlayersData");
-    public static readonly string PromoFile = Path.Combine(DbFolder, "promo.json");
 
     public static void EnsureDbFoldersExist()
     {

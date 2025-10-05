@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using Unity.Burst.CompilerServices;
 
 public class PlayerStatsDisplay : MonoBehaviour
 {
@@ -14,7 +15,21 @@ public class PlayerStatsDisplay : MonoBehaviour
 
     private void Start()
     {
-        UpdateStats();
+        // Если у нас уже есть данные — обновим сразу, иначе запросим у сервера
+        if (ClientGameState.Instance == null)
+        {
+            Debug.LogWarning("[PlayerStatsDisplay] ClientGameState missing.");
+            return;
+        }
+
+        if (ClientGameState.Instance.CurrentPlayerData == null)
+        {
+            ClientGameState.Instance.RequestPlayerData();
+        }
+        else
+        {
+            UpdateStats();
+        }
     }
 
     public void UpdateStats()

@@ -169,24 +169,85 @@ MonoBehaviour:
   m_GameObject: {fileID: 70713324}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8198d4b9c5792ff4f86dd03ed276b4be, type: 3}
+  m_Script: {fileID: 11500000, guid: 0f7d7074a0b39474fbea1599357e3a27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _regPanel: {fileID: 8571225918902405239}
-  _regEmail: {fileID: 1369045211258291903}
-  _regNickname: {fileID: 1369045211772679549}
-  _regPassword: {fileID: 1369045210338886027}
-  _regButton: {fileID: 1369045211559534219}
-  _regFeedback: {fileID: 985399836}
-  _loginPanel: {fileID: 322710034112081298}
-  _loginNickname: {fileID: 322710033801072467}
-  _loginPassword: {fileID: 322710032309935713}
+  _registerEmailInput: {fileID: 1369045211258291903}
+  _registerLoginInput: {fileID: 1369045211772679549}
+  _registerPasswordInput: {fileID: 1369045210338886027}
+  _registerButton: {fileID: 1369045211559534219}
+  _loginLoginInput: {fileID: 322710033801072467}
+  _loginPasswordInput: {fileID: 322710032309935713}
   _loginButton: {fileID: 322710032693806871}
-  _loginFeedback: {fileID: 1398026160}
-  _panelLoading: {fileID: 8211861784303156502}
-  _startGameButton: {fileID: 4245152121020556281}
-  _authToggleButton: {fileID: 0}
-  _authRootPanel: {fileID: 0}
+  _registerFeedbackText: {fileID: 985399836}
+  _loginFeedbackText: {fileID: 1398026160}
+--- !u!1 &233729909
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 233729910}
+  - component: {fileID: 233729911}
+  - component: {fileID: 233729912}
+  m_Layer: 0
+  m_Name: ServerDatabaseHost
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &233729910
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 233729909}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1133510466}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &233729911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 233729909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7a264f03eeebf847811efdca2f3fb70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMethod: 0
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  _autoCreateOnServerStart: 1
+--- !u!114 &233729912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 233729909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 476243350
+  _assetId: 0
+  serverOnly: 0
+  visibility: 0
+  hasSpawned: 0
 --- !u!1 &710758177
 GameObject:
   m_ObjectHideFlags: 0
@@ -271,8 +332,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: c1482dbce654844b9ba1c753cbea5d80, type: 2}
-  m_sharedMaterial: {fileID: 7374927986402738804, guid: c1482dbce654844b9ba1c753cbea5d80, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -516,7 +577,7 @@ GameObject:
   - component: {fileID: 1133510468}
   - component: {fileID: 1133510467}
   - component: {fileID: 1133510469}
-  - component: {fileID: 1133510470}
+  - component: {fileID: 1133510471}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -538,7 +599,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 710758178}
-  - {fileID: 2031101610}
+  - {fileID: 233729910}
   m_Father: {fileID: 1910212969}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1133510467
@@ -595,7 +656,7 @@ MonoBehaviour:
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   exceptionsDisconnect: 1
-  authenticator: {fileID: 1133510470}
+  authenticator: {fileID: 1133510471}
   offlineScene: Assets/_Project/Scenes/StartScene.unity
   onlineScene: Assets/_Project/Scenes/GameMenu.unity
   offlineSceneLoadDelay: 0
@@ -618,6 +679,7 @@ MonoBehaviour:
   evaluationInterval: 3
   timeInterpolationGui: 0
   _autoStartServer: 0
+  _connectButton: {fileID: 4245152121020556281}
 --- !u!114 &1133510469
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -632,7 +694,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offsetX: 0
   offsetY: 0
---- !u!114 &1133510470
+--- !u!114 &1133510471
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -641,7 +703,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1133510465}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73dfafdd660b7f94d8cda770c4ad13c6, type: 3}
+  m_Script: {fileID: 11500000, guid: 5095d5e937aa100418b56979758f869b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   OnServerAuthenticated:
@@ -650,6 +712,8 @@ MonoBehaviour:
   OnClientAuthenticated:
     m_PersistentCalls:
       m_Calls: []
+  _authUI: {fileID: 70713326}
+  _networkManager: {fileID: 1133510468}
 --- !u!1 &1398026158
 GameObject:
   m_ObjectHideFlags: 0
@@ -709,8 +773,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: c1482dbce654844b9ba1c753cbea5d80, type: 2}
-  m_sharedMaterial: {fileID: 7374927986402738804, guid: c1482dbce654844b9ba1c753cbea5d80, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1048,52 +1112,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2031101609
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2031101610}
-  - component: {fileID: 2031101611}
-  m_Layer: 0
-  m_Name: ServerDataManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2031101610
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2031101609}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1133510466}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2031101611
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2031101609}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea17ad95725876f42813ac92c87b9c01, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  accountsDb:
-    Accounts: []
 --- !u!1 &2083178408
 GameObject:
   m_ObjectHideFlags: 0
@@ -1103,7 +1121,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2083178412}
-  - component: {fileID: 2083178413}
   - component: {fileID: 2083178411}
   - component: {fileID: 2083178410}
   - component: {fileID: 2083178409}
@@ -1197,39 +1214,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &2083178413
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2083178408}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9eec46d8f86fe3d4dad172da9570aab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  elements:
-  - inputField: {fileID: 0}
-    icon: {fileID: 0}
-    emptyColor: {r: 0.7176471, g: 0.76862746, b: 0.79607844, a: 1}
-    filledColor: {r: 0, g: 0.7176471, b: 1, a: 1}
-  - inputField: {fileID: 0}
-    icon: {fileID: 0}
-    emptyColor: {r: 0.7176471, g: 0.76862746, b: 0.79607844, a: 1}
-    filledColor: {r: 0, g: 0.7176471, b: 1, a: 1}
-  - inputField: {fileID: 0}
-    icon: {fileID: 0}
-    emptyColor: {r: 0.7176471, g: 0.76862746, b: 0.79607844, a: 1}
-    filledColor: {r: 0, g: 0.7176471, b: 1, a: 1}
-  - inputField: {fileID: 0}
-    icon: {fileID: 0}
-    emptyColor: {r: 0.7176471, g: 0.76862746, b: 0.79607844, a: 1}
-    filledColor: {r: 0, g: 0.7176471, b: 1, a: 1}
-  - inputField: {fileID: 0}
-    icon: {fileID: 0}
-    emptyColor: {r: 0.7176471, g: 0.76862746, b: 0.79607844, a: 1}
-    filledColor: {r: 0, g: 0.7176471, b: 1, a: 1}
 --- !u!222 &52428131398194704
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3757,6 +3741,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 322710034112081301}
+  - component: {fileID: 322710034112081302}
   m_Layer: 5
   m_Name: HomeScene_Popup_Login
   m_TagString: Untagged
@@ -3784,6 +3769,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &322710034112081302
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322710034112081298}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &322710034167667649
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3827,19 +3824,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 322710034167667679}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 70713326}
-        m_TargetAssemblyTypeName: AuthUIController, Assembly-CSharp
-        m_MethodName: ShowRegisterPanel
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!224 &322710034167667676
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3871,6 +3856,7 @@ GameObject:
   - component: {fileID: 322710034167667678}
   - component: {fileID: 322710034167667679}
   - component: {fileID: 322710034167667649}
+  - component: {fileID: 322710034167667680}
   m_Layer: 5
   m_Name: Text_Signup
   m_TagString: Untagged
@@ -3977,6 +3963,25 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &322710034167667680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322710034167667677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 832f66fd94fef1d499db46b8ef8ffd91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _items:
+  - Target: {fileID: 322710034112081298}
+    Action: 1
+  - Target: {fileID: 8571225918902405239}
+    Action: 0
+  FadeDuration: 0.2
+  ManualButton: {fileID: 322710034167667649}
 --- !u!224 &322710034181635612
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5489,19 +5494,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1369045211569221074}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 70713326}
-        m_TargetAssemblyTypeName: AuthUIController, Assembly-CSharp
-        m_MethodName: ShowLoginPanel
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1369045211569221074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5613,6 +5606,7 @@ GameObject:
   - component: {fileID: 1369045211569221075}
   - component: {fileID: 1369045211569221074}
   - component: {fileID: 1369045211569221072}
+  - component: {fileID: 1369045211569221078}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -5639,6 +5633,25 @@ RectTransform:
   m_AnchoredPosition: {x: 399.38, y: -25}
   m_SizeDelta: {x: 97.14, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1369045211569221078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369045211569221076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 832f66fd94fef1d499db46b8ef8ffd91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _items:
+  - Target: {fileID: 322710034112081298}
+    Action: 0
+  - Target: {fileID: 8571225918902405239}
+    Action: 1
+  FadeDuration: 0.2
+  ManualButton: {fileID: 1369045211569221072}
 --- !u!222 &1369045211658086480
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7869,6 +7882,7 @@ GameObject:
   - component: {fileID: 4245152121020556278}
   - component: {fileID: 4245152121020556279}
   - component: {fileID: 4245152121020556281}
+  - component: {fileID: 4245152121020556282}
   m_Layer: 5
   m_Name: Button_Start
   m_TagString: Untagged
@@ -7957,31 +7971,26 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4245152121020556279}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4715862038329120260}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 70713326}
-        m_TargetAssemblyTypeName: AuthUIController, Assembly-CSharp
-        m_MethodName: ShowRegisterPanel
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &4245152121020556282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4245152121020556277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 832f66fd94fef1d499db46b8ef8ffd91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _items:
+  - Target: {fileID: 4715862038329120260}
+    Action: 1
+  - Target: {fileID: 8571225918902405239}
+    Action: 0
+  FadeDuration: 0.2
+  ManualButton: {fileID: 4245152121020556281}
 --- !u!1 &4245152121202249332
 GameObject:
   m_ObjectHideFlags: 0
@@ -23508,6 +23517,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8571225918902405236}
+  - component: {fileID: 8571225918902405240}
   m_Layer: 5
   m_Name: HomeScene_Popup_Signup
   m_TagString: Untagged
@@ -23515,6 +23525,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
+--- !u!225 &8571225918902405240
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8571225918902405239}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
