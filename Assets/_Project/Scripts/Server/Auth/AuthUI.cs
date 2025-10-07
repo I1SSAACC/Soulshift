@@ -47,7 +47,7 @@ public class AuthUI : MonoBehaviour
             return;
         }
 
-        AuthRequest request = new AuthRequest
+        AuthRequest request = new()
         {
             IsRegistration = true,
             Email = email,

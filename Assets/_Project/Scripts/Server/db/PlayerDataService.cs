@@ -1,6 +1,5 @@
 using System.IO;
-using UnityEngine;
-using Mirror;
+using System.Text;
 
 public class PlayerDataService
 {
@@ -22,7 +21,7 @@ public class PlayerDataService
         if (File.Exists(path) == false)
             return null;
 
-        string json = File.ReadAllText(path);
+        string json = File.ReadAllText(path, Encoding.UTF8);
 
         PlayerData playerData = Utils.FromJson<PlayerData>(json);
 
@@ -41,7 +40,7 @@ public class PlayerDataService
 
         string json = Utils.ToJson(data, true);
 
-        File.WriteAllText(path, json);
+        File.WriteAllText(path, json, Encoding.UTF8);
     }
 
     public string CreatePlayerAndReturnGuid(string login, string email, string passwordHash)
@@ -100,19 +99,24 @@ public class PlayerDataService
         if (player == null)
             return;
 
-        if (player.DeviceIds.Contains(deviceId) == false)
-            player.DeviceIds.Add(deviceId);
+        if (player.DeviceId == null)
+            player.DeviceId = new System.Collections.Generic.List<string>();
+
+        if (player.DeviceId.Contains(deviceId) == false)
+            player.DeviceId.Add(deviceId);
 
         SavePlayer(player);
     }
 
     private static string GetPlayerFilePath(string guid)
     {
-        return Path.Combine(DbPaths.PlayersDataFolder, $"{guid}.json");
+        // Используем общий метод из DbPaths для получения пути игрока
+        return DbPaths.GetPlayerFilePathByGuid(guid);
     }
 
     private static void EnsurePlayersFolderExists()
     {
+        // DbPaths.EnsureDbFoldersExist создаёт и папку players, если она нужна
         DbPaths.EnsureDbFoldersExist();
     }
 

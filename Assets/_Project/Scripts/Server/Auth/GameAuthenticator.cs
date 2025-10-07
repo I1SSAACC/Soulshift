@@ -48,17 +48,18 @@ public class GameAuthenticator : NetworkAuthenticator
     {
         NetworkServer.RegisterHandler<GetPlayerDataRequest>(OnServerReceiveGetPlayerDataRequest, false);
         NetworkServer.RegisterHandler<AuthRequest>(OnServerReceiveAuthRequest, false);
+        DbPaths.EnsureDbFoldersExist();
+
+        if (!File.Exists(DbPaths.AccountsFile))
+        {
+            var accountsDb = new AccountsDb();
+            Utils.WriteJsonToFile(accountsDb, DbPaths.AccountsFile, true);
+        }
     }
 
-    public override void OnStartClient()
-    {
-        // no-op
-    }
+    public override void OnStartClient() { }
 
-    public override void OnServerAuthenticate(NetworkConnectionToClient conn)
-    {
-        // wait for auth request
-    }
+    public override void OnServerAuthenticate(NetworkConnectionToClient conn) { }
 
     public override void OnClientAuthenticate()
     {
@@ -67,13 +68,9 @@ public class GameAuthenticator : NetworkAuthenticator
 
     private void TryAutoLoginWithToken()
     {
-        if (PlayerPrefs.HasKey(PlayerPrefsKeys.AuthTokenKey) == false)
-            return;
-
+        if (PlayerPrefs.HasKey(PlayerPrefsKeys.AuthTokenKey) == false) return;
         string savedToken = PlayerPrefs.GetString(PlayerPrefsKeys.AuthTokenKey);
-
-        if (string.IsNullOrEmpty(savedToken))
-            return;
+        if (string.IsNullOrEmpty(savedToken)) return;
 
         AuthRequest autoRequest = new AuthRequest
         {
@@ -88,25 +85,12 @@ public class GameAuthenticator : NetworkAuthenticator
         NetworkAuthBridge.SendAuthRequest(autoRequest);
     }
 
-    private void OnClientAuthRequestFromUI(AuthRequest msg)
-    {
-        NetworkAuthBridge.SendAuthRequest(msg);
-    }
+    private void OnClientAuthRequestFromUI(AuthRequest msg) => NetworkAuthBridge.SendAuthRequest(msg);
 
     private void OnServerReceiveAuthRequest(NetworkConnectionToClient conn, AuthRequest msg)
     {
-        if (msg.IsRegistration)
-        {
-            HandleRegistration(conn, msg);
-            return;
-        }
-
-        if (string.IsNullOrEmpty(msg.Token) == false)
-        {
-            HandleTokenLogin(conn, msg);
-            return;
-        }
-
+        if (msg.IsRegistration) { HandleRegistration(conn, msg); return; }
+        if (string.IsNullOrEmpty(msg.Token) == false) { HandleTokenLogin(conn, msg); return; }
         HandleLogin(conn, msg);
     }
 
@@ -114,29 +98,13 @@ public class GameAuthenticator : NetworkAuthenticator
     {
         if (string.IsNullOrEmpty(msg.Login) || string.IsNullOrEmpty(msg.Password) || string.IsNullOrEmpty(msg.Email))
         {
-            AuthResponse fail = new AuthResponse
-            {
-                Success = false,
-                Message = "Missing fields",
-                PlayerGuid = string.Empty,
-                Token = string.Empty
-            };
-
-            conn.Send(fail);
+            conn.Send(new AuthResponse { Success = false, Message = "Missing fields", PlayerGuid = string.Empty, Token = string.Empty });
             return;
         }
 
         if (File.Exists(DbPaths.AccountsFile) == false)
         {
-            AuthResponse error = new AuthResponse
-            {
-                Success = false,
-                Message = "Accounts DB missing",
-                PlayerGuid = string.Empty,
-                Token = string.Empty
-            };
-
-            conn.Send(error);
+            conn.Send(new AuthResponse { Success = false, Message = "Accounts DB missing", PlayerGuid = string.Empty, Token = string.Empty });
             return;
         }
 
@@ -144,18 +112,9 @@ public class GameAuthenticator : NetworkAuthenticator
         AccountsDb accountsDb = Utils.FromJson<AccountsDb>(accountsJson) ?? new AccountsDb();
 
         bool exists = accountsDb.Accounts.Exists(a => a.Nickname == msg.Login || a.Email == msg.Email);
-
         if (exists)
         {
-            AuthResponse fail = new AuthResponse
-            {
-                Success = false,
-                Message = "Account already exists",
-                PlayerGuid = string.Empty,
-                Token = string.Empty
-            };
-
-            conn.Send(fail);
+            conn.Send(new AuthResponse { Success = false, Message = "Account already exists", PlayerGuid = string.Empty, Token = string.Empty });
             return;
         }
 
@@ -167,28 +126,20 @@ public class GameAuthenticator : NetworkAuthenticator
             Nickname = msg.Login,
             Email = msg.Email,
             PasswordHash = Utils.ComputeSha256Hash(msg.Password),
-            IsOnline = true
+            IsOnline = true,
+            Token = string.Empty
         };
 
         string token = Utils.GenerateGuid();
-
         newEntry.Token = token;
 
         accountsDb.Accounts.Add(newEntry);
 
-        // Сохраняем базу через утилиту (UTF8 + pretty)
+        // save accounts db (pretty + utf8)
         Utils.WriteJsonToFile(accountsDb, DbPaths.AccountsFile, true);
 
-        AuthResponse success = new AuthResponse
-        {
-            Success = true,
-            Message = "Registration successful",
-            PlayerGuid = guid,
-            Token = token
-        };
-
+        AuthResponse success = new AuthResponse { Success = true, Message = "Registration successful", PlayerGuid = guid, Token = token };
         conn.Send(success);
-
         ServerAccept(conn);
     }
 
@@ -196,29 +147,13 @@ public class GameAuthenticator : NetworkAuthenticator
     {
         if (string.IsNullOrEmpty(msg.Login))
         {
-            AuthResponse fail = new AuthResponse
-            {
-                Success = false,
-                Message = "Missing login",
-                PlayerGuid = string.Empty,
-                Token = string.Empty
-            };
-
-            conn.Send(fail);
+            conn.Send(new AuthResponse { Success = false, Message = "Missing login", PlayerGuid = string.Empty, Token = string.Empty });
             return;
         }
 
         if (File.Exists(DbPaths.AccountsFile) == false)
         {
-            AuthResponse fail = new AuthResponse
-            {
-                Success = false,
-                Message = "Accounts DB missing",
-                PlayerGuid = string.Empty,
-                Token = string.Empty
-            };
-
-            conn.Send(fail);
+            conn.Send(new AuthResponse { Success = false, Message = "Accounts DB missing", PlayerGuid = string.Empty, Token = string.Empty });
             return;
         }
 
@@ -226,36 +161,18 @@ public class GameAuthenticator : NetworkAuthenticator
         AccountsDb accountsDb = Utils.FromJson<AccountsDb>(accountsJson) ?? new AccountsDb();
 
         AccountEntry account = accountsDb.Accounts.Find(a => a.Nickname == msg.Login || a.Email == msg.Login);
-
         if (account == null)
         {
-            AuthResponse fail = new AuthResponse
-            {
-                Success = false,
-                Message = "Account not found",
-                PlayerGuid = string.Empty,
-                Token = string.Empty
-            };
-
-            conn.Send(fail);
+            conn.Send(new AuthResponse { Success = false, Message = "Account not found", PlayerGuid = string.Empty, Token = string.Empty });
             return;
         }
 
         if (string.IsNullOrEmpty(account.PasswordHash) == false && string.IsNullOrEmpty(msg.Password) == false)
         {
             string providedHash = Utils.ComputeSha256Hash(msg.Password);
-
             if (account.PasswordHash != providedHash)
             {
-                AuthResponse fail = new AuthResponse
-                {
-                    Success = false,
-                    Message = "Invalid password",
-                    PlayerGuid = string.Empty,
-                    Token = string.Empty
-                };
-
-                conn.Send(fail);
+                conn.Send(new AuthResponse { Success = false, Message = "Invalid password", PlayerGuid = string.Empty, Token = string.Empty });
                 return;
             }
         }
@@ -263,25 +180,16 @@ public class GameAuthenticator : NetworkAuthenticator
         account.IsOnline = true;
 
         string token = Utils.GenerateGuid();
-
         account.Token = token;
 
-        // Сохраняем базу через утилиту (UTF8 + pretty)
+        // persist accounts db (IsOnline and Token changed)
         Utils.WriteJsonToFile(accountsDb, DbPaths.AccountsFile, true);
 
         if (string.IsNullOrEmpty(msg.DeviceId) == false)
             PlayerDataService.Instance.AddDeviceId(account.Guid, msg.DeviceId);
 
-        AuthResponse success = new AuthResponse
-        {
-            Success = true,
-            Message = "Login successful",
-            PlayerGuid = account.Guid,
-            Token = token
-        };
-
+        AuthResponse success = new AuthResponse { Success = true, Message = "Login successful", PlayerGuid = account.Guid, Token = token };
         conn.Send(success);
-
         ServerAccept(conn);
     }
 
@@ -289,71 +197,40 @@ public class GameAuthenticator : NetworkAuthenticator
     {
         if (File.Exists(DbPaths.AccountsFile) == false)
         {
-            AuthResponse fail = new AuthResponse
-            {
-                Success = false,
-                Message = "Accounts DB missing",
-                PlayerGuid = string.Empty,
-                Token = string.Empty
-            };
-
-            conn.Send(fail);
+            conn.Send(new AuthResponse { Success = false, Message = "Accounts DB missing", PlayerGuid = string.Empty, Token = string.Empty });
             return;
         }
 
         string accountsJson = File.ReadAllText(DbPaths.AccountsFile, Encoding.UTF8);
         AccountsDb accountsDb = Utils.FromJson<AccountsDb>(accountsJson) ?? new AccountsDb();
 
+        // find account by token in accountsDb
         AccountEntry account = accountsDb.Accounts.Find(a => a.Token == msg.Token);
 
         if (account == null)
         {
-            AuthResponse fail = new AuthResponse
-            {
-                Success = false,
-                Message = "Invalid token",
-                PlayerGuid = string.Empty,
-                Token = string.Empty
-            };
-
-            conn.Send(fail);
+            conn.Send(new AuthResponse { Success = false, Message = "Invalid token", PlayerGuid = string.Empty, Token = string.Empty });
             return;
         }
 
         account.IsOnline = true;
-
         string refreshedToken = Utils.GenerateGuid();
-
         account.Token = refreshedToken;
 
-        // Сохраняем базу через утилиту (UTF8 + pretty)
         Utils.WriteJsonToFile(accountsDb, DbPaths.AccountsFile, true);
 
         if (string.IsNullOrEmpty(msg.DeviceId) == false)
             PlayerDataService.Instance.AddDeviceId(account.Guid, msg.DeviceId);
 
-        AuthResponse success = new AuthResponse
-        {
-            Success = true,
-            Message = "Token login successful",
-            PlayerGuid = account.Guid,
-            Token = refreshedToken
-        };
-
+        AuthResponse success = new AuthResponse { Success = true, Message = "Token login successful", PlayerGuid = account.Guid, Token = refreshedToken };
         conn.Send(success);
-
         ServerAccept(conn);
     }
 
     private void OnClientAuthResponse(AuthResponse msg)
     {
         if (_authUI != null)
-        {
-            if (msg.Success)
-                _authUI.ShowLoginFeedback(msg.Message);
-            else
-                _authUI.ShowLoginFeedback(msg.Message);
-        }
+            _authUI.ShowLoginFeedback(msg.Message);
 
         if (msg.Success)
         {
@@ -389,5 +266,4 @@ public class GameAuthenticator : NetworkAuthenticator
         resp.PlayerDataJson = Utils.ToJson(pd, true);
         conn.Send(resp);
     }
-
 }
